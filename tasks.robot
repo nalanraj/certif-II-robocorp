@@ -7,6 +7,7 @@ Documentation     Orders robots from RobotSpareBin Industries Inc.
 Library           RPA.Browser.Selenium
 Library           RPA.HTTP
 Library           RPA.Tables
+Library           RPA.PDF
 
 *** Keywords ***
 Open the robot order website
@@ -40,9 +41,38 @@ Preview the robot
 *** Keywords ***
 Submit the order
     Click Button When Visible    id:order
-    Wait Until Page Contains Element    id:receipt
+    Assert successfull order
 
 
+*** Keywords ***
+Assert successfull order
+    Wait Until Element Is Visible    id:receipt
+    
+*** Keywords ***
+Store the receipt as a PDF file
+    [Arguments]    ${row}
+    Wait Until Element Is Visible    id:receipt
+    ${reciept_order_number}=    Get Text    class:badge-success
+    Html To Pdf    ${reciept_order_number}    ${CURDIR}${/}output${/}reciepts${/}${row}_reciepts.pdf
+    [Return]    ${CURDIR}${/}output${/}reciepts${/}${row}_reciepts.pdf
+
+*** Keywords ***
+Take a screenshot of the robot
+    [Arguments]    ${row}
+    Screenshot    id:robot-preview-image    ${CURDIR}${/}output${/}images${/}${row}_robot.png
+    [Return]    ${CURDIR}${/}output${/}images${/}${row}_robot.png
+
+*** Keywords ***
+Embed the robot screenshot to the receipt PDF file
+    [Arguments]    ${screenshot}    ${pdf}
+    Open Pdf    ${pdf}
+    Add Watermark Image To Pdf    ${screenshot}     ${pdf}
+    Close Pdf
+
+*** Keywords ***
+Go to order another robot
+    Click Button When Visible    id:order-another
+    Wait Until Element Is Visible    class:btn-dark    
 
 
 *** Tasks ***
@@ -54,10 +84,10 @@ Order robots from RobotSpareBin Industries Inc
         Close the annoying modal
         Fill the form    ${row}    
         Preview the robot
-        Submit the order
-    #    ${pdf}=    Store the receipt as a PDF file    ${row}[Order number]
-    #    ${screenshot}=    Take a screenshot of the robot    ${row}[Order number]
-    #    Embed the robot screenshot to the receipt PDF file    ${screenshot}    ${pdf}
-    #    Go to order another robot
+        Wait Until Keyword Succeeds    3x    0.3 sec    Submit the order
+        ${pdf}=    Store the receipt as a PDF file    ${row}[Order number]
+        ${screenshot}=    Take a screenshot of the robot    ${row}[Order number]
+        Embed the robot screenshot to the receipt PDF file    ${screenshot}    ${pdf}
+        Go to order another robot
     END
     # Create a ZIP file of the receipts

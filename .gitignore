@@ -11,3 +11,7 @@ temp/
 .DS_Store
 *.pyc
 *.zip
+log.html
+output.xml
+report.html
+orders.csv
