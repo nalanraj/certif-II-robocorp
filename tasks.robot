@@ -56,8 +56,8 @@ Store the receipt as a PDF file
     [Arguments]    ${row}
     Wait Until Element Is Visible    id:receipt
     ${reciept_order_number}=    Get Text    class:badge-success
-    Html To Pdf    ${reciept_order_number}    ${CURDIR}${/}output${/}reciepts${/}${row}_reciepts.pdf
-    [Return]    ${CURDIR}${/}output${/}reciepts${/}${row}_reciepts.pdf
+    Html To Pdf    ${reciept_order_number}    ${CURDIR}${/}output${/}receipts${/}${row}_receipts.pdf
+    [Return]    ${CURDIR}${/}output${/}receipts${/}${row}_receipts.pdf
 
 *** Keywords ***
 Take a screenshot of the robot
@@ -79,7 +79,7 @@ Go to order another robot
 
 *** Keywords ***
 Create a ZIP file of the receipts
-   Archive Folder With ZIP   ${CURDIR}${/}output${/}reciepts    reciepts.zip    recursive=True
+   Archive Folder With ZIP   ${CURDIR}${/}output${/}receipts    ${CURDIR}${/}output${/}receipts.zip    recursive=True
 
 
 *** Tasks ***
