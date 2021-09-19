@@ -8,6 +8,7 @@ Library           RPA.Browser.Selenium
 Library           RPA.HTTP
 Library           RPA.Tables
 Library           RPA.PDF
+Library           RPA.Archive
 
 *** Keywords ***
 Open the robot order website
@@ -74,6 +75,10 @@ Go to order another robot
     Click Button When Visible    id:order-another
     Wait Until Element Is Visible    class:btn-dark    
 
+*** Keywords ***
+Create a ZIP file of the receipts
+   Archive Folder With ZIP   ${CURDIR}${/}output${/}reciepts    reciepts.zip    recursive=True
+
 
 *** Tasks ***
 Order robots from RobotSpareBin Industries Inc
@@ -90,4 +95,4 @@ Order robots from RobotSpareBin Industries Inc
         Embed the robot screenshot to the receipt PDF file    ${screenshot}    ${pdf}
         Go to order another robot
     END
-    # Create a ZIP file of the receipts
+    Create a ZIP file of the receipts
