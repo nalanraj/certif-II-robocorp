@@ -9,10 +9,12 @@ Library           RPA.HTTP
 Library           RPA.Tables
 Library           RPA.PDF
 Library           RPA.Archive
+Library           RPA.Robocorp.Vault
 
 *** Keywords ***
 Open the robot order website
-    Open Available Browser    https://robotsparebinindustries.com/#/robot-order
+    ${secret}=    Get Secret    urlrobotorder
+    Open Available Browser    ${secret}[url]
 
 *** Keywords ***
 Download the order file
